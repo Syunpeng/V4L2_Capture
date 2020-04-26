@@ -16,8 +16,8 @@
 #include <asm/types.h>        
 #include <linux/videodev2.h>
  
-#include "jpeglib.h"
-#include "jerror.h"
+#include <jpeglib.h>
+#include <jerror.h>
  
  
 #define CLEAR(x) memset (&(x), 0, sizeof (x))
@@ -26,7 +26,9 @@
 #define  VIDEO_WIDTH    640
 #define  VIDEO_HEIGHT   480 
 #define  PIXEL_DEPTH    3 
-#define  CAPTURE_FILE   "test.yuv"  //"test.jpg"     // 笔记本摄像头选择"test.jpg" 
+#define  CAPTURE_FILE     "../test.yuv"  //"test.jpg"     // 笔记本摄像头选择"test.jpg" 
+#define  JPEG_TEST_FILE   "../testjpeg.jpg"
+#define  RGB_TO_BMP_FILE  "../testrgb2bmp.bmp"
 //extern JSAMPLE * image_buffer;	/* Points to large array of R,G,B-order data */
 int image_height = 480;	/* Number of rows in image */
 int image_width  = 640;		/* Number of columns in image */ 
@@ -318,9 +320,9 @@ static int read_frame (void)
 	
 	YUV422TORGB24(rgb24_buffer,buffers[buf.index].start);
 	
-    Rgb2Bmp(rgb24_buffer,"out_bmp.bmp",VIDEO_WIDTH,VIDEO_HEIGHT,PIXEL_DEPTH);
+    Rgb2Bmp(rgb24_buffer,RGB_TO_BMP_FILE,VIDEO_WIDTH,VIDEO_HEIGHT,PIXEL_DEPTH);
 	
-	write_JPEG_file (rgb24_buffer,"jpeglibrgb.jpg", 80,VIDEO_WIDTH,VIDEO_HEIGHT,3,2);	
+	write_JPEG_file (rgb24_buffer,JPEG_TEST_FILE, 80,VIDEO_WIDTH,VIDEO_HEIGHT,3,2);	
 	
     //再入列
     if(ioctl (fd, VIDIOC_QBUF, &buf)<0)
